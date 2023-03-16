@@ -1,19 +1,16 @@
-from config import OPEN_AI_API_KEY;
-import os 
-import openai
+import pickle
+import string
+import streamlit as st
+import webbrowser
 
-openai.api_key = OPEN_AI_API_KEY
+global Lrdetect_Model
 
+LrdetectFile = open('model.pckl','rb')
+Lrdetect_Model = pickle.load(LrdetectFile)
+LrdetectFile.close()
+st.title("Language Detection Tool")
+input_test = st.text_input("provide your text input here", 'Hello my name is jay ')
 
-input = "Tell me a joke"
-res = openai.Completion.create (
-    model = "text-davinci-003",
-    prompt = input,
-    temperature = 150,
-    max_tokens = 150,
-    top_p = 1.0,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0
-)
-
-print(res)
+button_clicked = st.button("Get Language Name")
+if button_clicked:
+	st.text(Lrdetect_Model.predict([input_test]))
